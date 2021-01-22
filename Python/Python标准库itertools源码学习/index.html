@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"bdl-1989.github.io","root":"/","scheme":"Mist","version":"8.0.0-rc.5","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
+  </script>
+
+  <meta name="description" content="&amp;emsp;&amp;emsp;今天拜读了leetcode大神Stefan的一道python题解。第一次接触到itertools的python标准库，之前用回溯算法刷了几遍leetcode的排列和组合题。现在学习下标准库是如何写的。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python标准库itertools源码学习">
+<meta property="og:url" content="https://bdl-1989.github.io/Python/Python%E6%A0%87%E5%87%86%E5%BA%93itertools%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0/index.html">
+<meta property="og:site_name" content="To be the creator">
+<meta property="og:description" content="&amp;emsp;&amp;emsp;今天拜读了leetcode大神Stefan的一道python题解。第一次接触到itertools的python标准库，之前用回溯算法刷了几遍leetcode的排列和组合题。现在学习下标准库是如何写的。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-08-22T05:27:45.000Z">
+<meta property="article:modified_time" content="2020-11-09T13:17:22.066Z">
+<meta property="article:author" content="Dingli Bao">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="itertools">
+<meta property="article:tag" content="combination">
+<meta property="article:tag" content="permutation">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://bdl-1989.github.io/Python/Python%E6%A0%87%E5%87%86%E5%BA%93itertools%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Python标准库itertools源码学习 | To be the creator</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">To be the creator</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#itertools-combinations-%E5%85%A8%E7%BB%84%E5%90%88"><span class="nav-number">1.</span> <span class="nav-text">itertools.combinations 全组合</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A5%E5%8F%A3"><span class="nav-number">1.1.</span> <span class="nav-text">接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BA%90%E7%A0%81"><span class="nav-number">1.2.</span> <span class="nav-text">源码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#itertools-permutations-%E5%85%A8%E6%8E%92%E5%88%97"><span class="nav-number">2.</span> <span class="nav-text">itertools.permutations 全排列</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A5%E5%8F%A3-1"><span class="nav-number">2.1.</span> <span class="nav-text">接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BA%90%E7%A0%81-1"><span class="nav-number">2.2.</span> <span class="nav-text">源码</span></a></li></ol></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Dingli Bao</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">29</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">35</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Bdl-1989" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Bdl-1989" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:dl.super@hotmail.com" title="E-Mail → mailto:dl.super@hotmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/Bdl-1989/" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://bdl-1989.github.io/Python/Python%E6%A0%87%E5%87%86%E5%BA%93itertools%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Dingli Bao">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="To be the creator">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Python标准库itertools源码学习
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-08-22 13:27:45" itemprop="dateCreated datePublished" datetime="2020-08-22T13:27:45+08:00">2020-08-22</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-11-09 21:17:22" itemprop="dateModified" datetime="2020-11-09T21:17:22+08:00">2020-11-09</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="far fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+              <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>2.5k</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+              <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>2 mins.</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>&emsp;&emsp;今天拜读了leetcode大神Stefan的一道<a target="_blank" rel="noopener" href="https://leetcode.com/problems/24-game/discuss/107675/Short-Python">python题解</a>。第一次接触到itertools的python标准库，之前用回溯算法刷了几遍leetcode的排列和组合题。现在学习下标准库是如何写的。<br></p>
+<a id="more"></a>
+<blockquote><footer><strong>Python3.8在线文档</strong><cite><a target="_blank" rel="noopener" href="https://docs.python.org/3.8/library/itertools.html?highlight=itertool">itertools</a></cite></footer></blockquote>
+
+
+<h2 id="itertools-combinations-全组合"><a href="#itertools-combinations-全组合" class="headerlink" title="itertools.combinations 全组合"></a>itertools.combinations 全组合</h2><p>&emsp;&emsp;从可迭代的输入返回元素的r长度子序列。<br>&emsp;&emsp;根据可迭代的输入顺序，按字典顺序发出组合元组。 因此，如果对可迭代的输入进行排序，则将按排序顺序生成组合元组。<br>&emsp;&emsp;元素视其位置为唯一，而非其值。 因此，如果输入元素是唯一的，则每个组合中将没有重复值。</p>
+<h3 id="接口"><a href="#接口" class="headerlink" title="接口"></a>接口</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">itertools.combinations(iterable, r)</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h3><ul>
+<li><p>输入为combinations(‘ABCD’, 2) –&gt; AB AC AD BC BD CD</p>
+</li>
+<li><p>时间复杂度为O(r * n?)。从分析来看肯定不是n，时间复杂度优于r*n，因为视位置为唯一，已经排除了重复的情况。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">combinations</span>(<span class="params">iterable, r</span>):</span>  <span class="comment"># 这里一定要给定子序列的长度</span></span><br><span class="line">    pool = tuple(iterable) <span class="comment"># 转换成元组，(&#x27;A&#x27;, &#x27;B&#x27;, &#x27;C&#x27;, &#x27;D&#x27;)</span></span><br><span class="line">    n = len(pool) <span class="comment"># n为4</span></span><br><span class="line">    <span class="keyword">if</span> r &gt; n: <span class="comment"># check输入r是否合法</span></span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    indices = list(range(r)) <span class="comment"># 生成长度为r并且值为0到r的list，[0, 1]</span></span><br><span class="line">    <span class="keyword">yield</span> tuple(pool[i] <span class="keyword">for</span> i <span class="keyword">in</span> indices) <span class="comment"># 返回第一个迭代值，(&#x27;A&#x27;, &#x27;B&#x27;)，并且记住当前位置以继续下一次执行</span></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> reversed(range(r)):  <span class="comment">#  i 从1到0遍历； for else用法：当for遍历完成执行else语句</span></span><br><span class="line">            <span class="keyword">if</span> indices[i] != i + n - r:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">        <span class="keyword">else</span>: </span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        indices[i] += <span class="number">1</span></span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(i+<span class="number">1</span>, r):</span><br><span class="line">            indices[j] = indices[j<span class="number">-1</span>] + <span class="number">1</span></span><br><span class="line">        <span class="keyword">yield</span> tuple(pool[i] <span class="keyword">for</span> i <span class="keyword">in</span> indices)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>下标变化：<br>  0   1<br>  0   2<br>  0   3<br>  1   2<br>  1   3<br>  2   3</p>
+</li>
+</ul>
+<h2 id="itertools-permutations-全排列"><a href="#itertools-permutations-全排列" class="headerlink" title="itertools.permutations 全排列"></a>itertools.permutations 全排列</h2><p>&emsp;&emsp;返回迭代器中元素的连续r长度排列。</p>
+<p>&emsp;&emsp;如果未指定r或为None，则r默认为可迭代的长度，并生成所有可能的全长排列。</p>
+<p>&emsp;&emsp;根据输入可迭代的顺序，按字典顺序发出排列元组。 因此，如果对可迭代的输入进行排序，则将按排序顺序生成组合元组。</p>
+<p>&emsp;&emsp;元素视其位置为唯一，而非其值。 因此，如果输入元素是唯一的，则每个排列中都不会有重复值。</p>
+<h3 id="接口-1"><a href="#接口-1" class="headerlink" title="接口"></a>接口</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">itertools.permutations(iterable, r=<span class="literal">None</span>)</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="源码-1"><a href="#源码-1" class="headerlink" title="源码"></a>源码</h3><ul>
+<li>输入为permutations(‘ABCD’, 2) –&gt; AB AC AD BA BC BD CA CB CD DA DB DC</li>
+<li>时间复杂度为O(r * n)。<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">permutations</span>(<span class="params">iterable, r=None</span>):</span></span><br><span class="line">    <span class="comment"># permutations(&#x27;ABCD&#x27;, 2) --&gt; AB AC AD BA BC BD CA CB CD DA DB DC</span></span><br><span class="line">    <span class="comment"># permutations(range(3)) --&gt; 012 021 102 120 201 210</span></span><br><span class="line">    pool = tuple(iterable)</span><br><span class="line">    n = len(pool)</span><br><span class="line">    r = n <span class="keyword">if</span> r <span class="keyword">is</span> <span class="literal">None</span> <span class="keyword">else</span> r</span><br><span class="line">    <span class="keyword">if</span> r &gt; n:</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    indices = list(range(n))</span><br><span class="line">    cycles = list(range(n, n-r, <span class="number">-1</span>))</span><br><span class="line">    <span class="keyword">yield</span> tuple(pool[i] <span class="keyword">for</span> i <span class="keyword">in</span> indices[:r])</span><br><span class="line">    <span class="keyword">while</span> n:</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> reversed(range(r)):</span><br><span class="line">            cycles[i] -= <span class="number">1</span></span><br><span class="line">            <span class="keyword">if</span> cycles[i] == <span class="number">0</span>:</span><br><span class="line">                indices[i:] = indices[i+<span class="number">1</span>:] + indices[i:i+<span class="number">1</span>]</span><br><span class="line">                cycles[i] = n - i</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                j = cycles[i]</span><br><span class="line">                indices[i], indices[-j] = indices[-j], indices[i]</span><br><span class="line">                <span class="keyword">yield</span> tuple(pool[i] <span class="keyword">for</span> i <span class="keyword">in</span> indices[:r])</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span></span><br></pre></td></tr></table></figure></li>
+<li>也可以复用API<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">permutations</span>(<span class="params">iterable, r=None</span>):</span></span><br><span class="line">    pool = tuple(iterable)</span><br><span class="line">    n = len(pool)</span><br><span class="line">    r = n <span class="keyword">if</span> r <span class="keyword">is</span> <span class="literal">None</span> <span class="keyword">else</span> r</span><br><span class="line">    <span class="keyword">for</span> indices <span class="keyword">in</span> product(range(n), repeat=r):</span><br><span class="line">        <span class="keyword">if</span> len(set(indices)) == r:</span><br><span class="line">            <span class="keyword">yield</span> tuple(pool[i] <span class="keyword">for</span> i <span class="keyword">in</span> indices)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">product</span>(<span class="params">*args, repeat=<span class="number">1</span></span>):</span></span><br><span class="line">    <span class="comment"># product(&#x27;ABCD&#x27;, &#x27;xy&#x27;) --&gt; Ax Ay Bx By Cx Cy Dx Dy</span></span><br><span class="line">    <span class="comment"># product(range(2), repeat=3) --&gt; 000 001 010 011 100 101 110 111</span></span><br><span class="line">    pools = [tuple(pool) <span class="keyword">for</span> pool <span class="keyword">in</span> args] * repeat   <span class="comment"># 将输入成为元组并重复repeat次</span></span><br><span class="line">    result = [[]] <span class="comment">#嵌套list</span></span><br><span class="line">    <span class="keyword">for</span> pool <span class="keyword">in</span> pools:</span><br><span class="line">        result = [x+[y] <span class="keyword">for</span> x <span class="keyword">in</span> result <span class="keyword">for</span> y <span class="keyword">in</span> pool] <span class="comment"># 这个写法很妙啊！上面repeat几次，这里就有几层！</span></span><br><span class="line">    <span class="keyword">for</span> prod <span class="keyword">in</span> result:</span><br><span class="line">        <span class="keyword">yield</span> tuple(prod)</span><br></pre></td></tr></table></figure></li>
+<li>product(range(4), repeat=2)</li>
+<li>第一次：<br>  (0)<br>  (1)<br>  (2)<br>  (3)</li>
+<li>第二次：<br>  (0, 0)<br>  (0, 1)<br>  (0, 2)<br>  (0, 3)<br>  (1, 0)<br>  (1, 1)<br>  (1, 2)<br>  (1, 3)<br>  (2, 0)<br>  (2, 1)<br>  (2, 2)<br>  (2, 3)<br>  (3, 0)<br>  (3, 1)<br>  (3, 2)<br>  (3, 3)</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Dingli Bao
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://bdl-1989.github.io/Python/Python%E6%A0%87%E5%87%86%E5%BA%93itertools%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0/" title="Python标准库itertools源码学习">https://bdl-1989.github.io/Python/Python标准库itertools源码学习/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/python/" rel="tag"># python</a>
+              <a href="/tags/itertools/" rel="tag"># itertools</a>
+              <a href="/tags/combination/" rel="tag"># combination</a>
+              <a href="/tags/permutation/" rel="tag"># permutation</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/DataStructure/%E4%BA%8C%E5%8F%89%E6%A0%91BinaryTree/" rel="prev" title="二叉树BinaryTree">
+                  <i class="fa fa-chevron-left"></i> 二叉树BinaryTree
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/Algorithm/BrianKernigham/" rel="next" title="BrianKernigham">
+                  BrianKernigham <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+  
+  
+  
+
+
+
+      
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Dingli Bao</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="Symbols count total">51k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">46 mins.</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
+
+<script class="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"bdl-1989.github.io","root":"/","scheme":"Mist","version":"8.0.0-rc.5","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}};
+  </script>
+
+  <meta name="description" content="&amp;emsp;&amp;emsp;本文为modelica specification 3.4学习摘要。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Modelica Specification 3.4 Study Notes">
+<meta property="og:url" content="https://bdl-1989.github.io/Modelica/Modelica-Notes/index.html">
+<meta property="og:site_name" content="To be the creator">
+<meta property="og:description" content="&amp;emsp;&amp;emsp;本文为modelica specification 3.4学习摘要。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-09-05T10:47:00.000Z">
+<meta property="article:modified_time" content="2020-11-09T13:17:22.058Z">
+<meta property="article:author" content="Dingli Bao">
+<meta property="article:tag" content="modelica">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://bdl-1989.github.io/Modelica/Modelica-Notes/">
+
+
+<script class="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Modelica Specification 3.4 Study Notes | To be the creator</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  body { margin-top: 2rem; }
+
+  .use-motion .menu-item,
+  .use-motion .sidebar,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header {
+    visibility: visible;
+  }
+
+  .use-motion .header,
+  .use-motion .site-brand-container .toggle,
+  .use-motion .footer { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle,
+  .use-motion .custom-logo-image {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line {
+    transform: scaleX(1);
+  }
+
+  .search-pop-overlay, .sidebar-nav { display: none; }
+  .sidebar-panel { display: block; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">To be the creator</h1>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <section class="post-toc-wrap sidebar-panel">
+          <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Scope-of-this-document"><span class="nav-number">1.1.</span> <span class="nav-text">Scope of this document</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lexical-Structure"><span class="nav-number">2.</span> <span class="nav-text">Lexical Structure</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Operators-and-expressions"><span class="nav-number">3.</span> <span class="nav-text">Operators and expressions</span></a></li></ol></div>
+      </section>
+      <!--/noindex-->
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Dingli Bao</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">29</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">35</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Bdl-1989" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Bdl-1989" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:dl.super@hotmail.com" title="E-Mail → mailto:dl.super@hotmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </section>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/Bdl-1989/" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+      
+
+      
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://bdl-1989.github.io/Modelica/Modelica-Notes/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Dingli Bao">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="To be the creator">
+    </span>
+
+    
+    
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Modelica Specification 3.4 Study Notes
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-09-05 18:47:00" itemprop="dateCreated datePublished" datetime="2020-09-05T18:47:00+08:00">2020-09-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-11-09 21:17:22" itemprop="dateModified" datetime="2020-11-09T21:17:22+08:00">2020-11-09</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Modelica/" itemprop="url" rel="index"><span itemprop="name">Modelica</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="Views" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="far fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="Symbols count in article">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+              <span class="post-meta-item-text">Symbols count in article: </span>
+              <span>9.2k</span>
+            </span>
+            <span class="post-meta-item" title="Reading time">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+              <span class="post-meta-item-text">Reading time &asymp;</span>
+              <span>8 mins.</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>&emsp;&emsp;本文为modelica specification 3.4学习摘要。<br></p>
+<a id="more"></a>
+
+<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><p>&emsp;&emsp;Modelica是一种能够用于物理系统建模、设计支持高效开发库和模型交换的语言。</p>
+<blockquote>
+<p>“Modelica is a language for modeling of physical systems, designed to support effective library development and<br>model exchange.” <br></p>
+</blockquote>
+<h3 id="Scope-of-this-document"><a href="#Scope-of-this-document" class="headerlink" title="Scope of this document"></a>Scope of this document</h3><p>&emsp;&emsp;Modelica specification只用于尽可能满足模拟结果的方程组定义，而不是指导如何建模。 <br></p>
+<p>&emsp;&emsp;混合的DAE（differential algebraic equation）组成为：</p>
+<ul>
+<li>定义具有合适的基本类型、前缀和属性，如 “Real v=5”；</li>
+<li>方程区的方程组；</li>
+<li>方程组的调用需要包含所有输入和输出，此时方程数量 = 基本结果变量数；</li>
+<li>算法区每个方程都表示变量正在变化，此时方程数量 = 不同赋值的变量数量；</li>
+<li>When-clause区的方程为条件判断方程，又称瞬时方程。方程的变量在断句中改变，此时方程数量 = 不同赋值的变量数量。</li>
+</ul>
+<p>&emsp;&emsp;模型的初始设置是指在初始时刻，使用起始值以及瞬时方程。</p>
+<blockquote>
+<p>Initial setup of the model is specified using start-values and instantaneous equations that hold at the initial time<br>only.</p>
+</blockquote>
+<p>&emsp;&emsp;Modelica class同时也包含annotation，如正式的评论，其可以具体说明图标和图片、类的注释以及版本信息。</p>
+<h2 id="Lexical-Structure"><a href="#Lexical-Structure" class="headerlink" title="Lexical Structure"></a>Lexical Structure</h2><p>&emsp;&emsp;本章描述了Modelica的几个基本构建块，如字符和词汇单元，包含标识符和文字。</p>
+<ul>
+<li><p>Modelica使用的是Unicode，但有些地方受限于7-bit ASCII characters。</p>
+</li>
+<li><p>两种comment方式</p>
+<ol>
+<li>Comment使用方法，与C++相同<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; comment Characters from &#x2F;&#x2F; to the end of the line are ignored.</span><br><span class="line">&#x2F;* comment *&#x2F; Characters between &#x2F;* and *&#x2F; are ignored, including line terminators.</span><br></pre></td></tr></table></figure></li>
+<li>文档形式的comment<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">model TempResistor &quot;Temperature dependent resistor&quot;</span><br><span class="line"> ...</span><br><span class="line"> parameter Real R &quot;Resistance for reference temp.&quot;;</span><br><span class="line"> ...</span><br><span class="line">end TempResistor;</span><br></pre></td></tr></table></figure>
+
+
+</li>
+</ol>
+</li>
+</ul>
+<ul>
+<li><p>标识符和命名</p>
+</li>
+<li><p>Modelica关键词<br>  algorithm discrete false loop pure<br>  and each final model record<br>  annotation else flow not redeclare<br>  elseif for operator replaceable<br>  block elsewhen function or return<br>  break encapsulated if outer stream<br>  class end import output then<br>  connect enumeration impure package true<br>  connector equation in parameter type<br>  constant expandable initial partial when<br>  constrainedby extends inner protected while<br>  der external input public within</p>
+</li>
+</ul>
+<h2 id="Operators-and-expressions"><a href="#Operators-and-expressions" class="headerlink" title="Operators and expressions"></a>Operators and expressions</h2><table>
+<thead>
+<tr>
+<th>Operator Group</th>
+<th>Operator</th>
+<th>Syntax Examples</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>postfix array index operator</td>
+<td>[]</td>
+<td>arr[index]</td>
+</tr>
+<tr>
+<td>postfix access operator</td>
+<td>.</td>
+<td>a.b</td>
+</tr>
+<tr>
+<td>postfix function call</td>
+<td>funcName(function-arguments)</td>
+<td>sin(4.36)</td>
+</tr>
+<tr>
+<td>array construct/concat</td>
+<td>{expressions} [expressions] [expressions; expressions…]</td>
+<td>{2,3} [5,6] [2,3; 7,8]</td>
+</tr>
+<tr>
+<td>exponentiation</td>
+<td>^</td>
+<td>2^3</td>
+</tr>
+<tr>
+<td>multiplicative and array elementwise multiplicative</td>
+<td>* / .* ./</td>
+<td>2<em>3 2/3 [1,2;3,4].</em>[2,3;5,6]</td>
+</tr>
+<tr>
+<td>additive and array elementwise additive</td>
+<td>+ - +expr -expr .+ .-</td>
+<td>a+b, a-b, +a, -a [1,2;3,4].+[2,3;5,6]</td>
+</tr>
+<tr>
+<td>relational</td>
+<td>&lt; &lt;= &gt; &gt;= == &lt;&gt;</td>
+<td>a&lt;b, a&lt;=b, a&gt;b, …</td>
+</tr>
+<tr>
+<td>unary negation</td>
+<td>not expr</td>
+<td>not b1</td>
+</tr>
+<tr>
+<td>logical and</td>
+<td>and</td>
+<td>b1 and b2</td>
+</tr>
+<tr>
+<td>logical or</td>
+<td>or</td>
+<td>b1 or b2</td>
+</tr>
+<tr>
+<td>array range</td>
+<td>expr : expr  expr : expr : expr</td>
+<td>1:5 start:step:stop</td>
+</tr>
+<tr>
+<td>conditional</td>
+<td>if expr then expr else expr</td>
+<td>if b then 3 else x</td>
+</tr>
+<tr>
+<td>named argument</td>
+<td>ident = expr</td>
+<td>x = 2.26</td>
+</tr>
+</tbody></table>
+<ul>
+<li><p>此外，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">2*-2 &#x2F;&#x2F; &#x3D; -4 in Mathematica&#x2F;MATLAB; is illegal in Modelica</span><br><span class="line">--2 &#x2F;&#x2F; &#x3D; 2 in Mathematica&#x2F;MATLAB; is illegal in Modelica </span><br><span class="line">++2 &#x2F;&#x2F; &#x3D; 2 in Mathematica&#x2F;MATLAB; is illegal in Modelica</span><br><span class="line">2--2 &#x2F;&#x2F; &#x3D; 4 in Mathematica&#x2F;MATLAB; is illegal in Modelica</span><br><span class="line">Non-associative exponentiation and array range operator:</span><br><span class="line"> x^y^z &#x2F;&#x2F; Not legal, use parenthesis to make it clear</span><br><span class="line"> a:b:c:d:e:f:g &#x2F;&#x2F; Not legal, and scalar arguments gives no legal interpretation.</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>评估顺序</p>
+</li>
+</ul>
+<ol>
+<li>工具能够自由地求解、重排和不评估表达式，如果其值不影响结果。</li>
+<li>if表达式只会在满足条件时，保证评估其断句。</li>
+<li>但关系型运算符的生成状态或者时间事件将持续集成最近发生事件的值。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"> Boolean v[n];</span><br><span class="line"> Boolean b;</span><br><span class="line"> Integer I;</span><br><span class="line">equation</span><br><span class="line"> x&#x3D;v[I] and (I&gt;&#x3D;1 and I&lt;&#x3D;n); &#x2F;&#x2F; Invalid</span><br><span class="line"> x&#x3D;if (I&gt;&#x3D;1 and I&lt;&#x3D;n) then v[I] else false; &#x2F;&#x2F; Correct</span><br><span class="line">To guard square against square root of negative number use noEvent:</span><br><span class="line"> der(h)&#x3D;if h&gt;0 then –c*sqrt(h) else 0; &#x2F;&#x2F; Incorrect</span><br><span class="line"> der(h)&#x3D;if noEvent(h&gt;0) then –c*sqrt(h) else 0; &#x2F;&#x2F; Correct</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>内置时间变量<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">input Real time (final quantity &#x3D; &quot;Time&quot;,</span><br><span class="line"> final unit &#x3D; &quot;s&quot;);</span><br><span class="line"></span><br><span class="line">encapsulated model SineSource</span><br><span class="line"> import Modelica.Math.sin;</span><br><span class="line"> connector OutPort&#x3D;output Real;</span><br><span class="line"> OutPort y&#x3D;sin(time); &#x2F;&#x2F; Uses the built-in variable time.</span><br><span class="line">end SineSource;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<ul>
+<li>数字方程和转换方程</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Form</th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>abs(v)</td>
+<td>Is expanded into “noEvent(if v &gt;= 0 then v else –v)”. Argument v needs to be an Integer or Real expression.</td>
+</tr>
+<tr>
+<td>sign(v)</td>
+<td>Is expanded into “noEvent(if v&gt;0 then 1 else if v&lt;0 then –1 else 0)”. Argument v needs to be an Integer or Real expression.</td>
+</tr>
+<tr>
+<td>sqrt(v)</td>
+<td>Returns the square root of v if v&gt;=0, otherwise an error occurs. Argument v needs to be an Integer or Real expression.</td>
+</tr>
+<tr>
+<td>Integer(e)</td>
+<td>Returns the ordinal number of the expression e of enumeration type that evaluates to the enumeration value E.enumvalue, where Integer(E.e1)=1, Integer(E.en)= n, for an enumeration type E=enumeration(e1, …, en). See also Section 4.8.5.2.</td>
+</tr>
+<tr>
+<td>EnumTypeName(i)</td>
+<td>For any enumeration type EnumTypeName, returns the enumeration value EnumTypeName.e such that Integer(EnumTypeName.e) = i. Refer to the definition of Integer above. It is an error to attempt to convert values of i that do not correspond to values of the enumeration type. See also Section 4.8.5.3.</td>
+</tr>
+<tr>
+<td>String(b, options) String(i, options) String(r, significantDigits=d, options) String(r, format=s) String(e, options)</td>
+<td>Convert a scalar non-String expression to a String representation. The first argument may be a Boolean b, an Integer i, a Real r or an Enumeration e (Section 4.8.5.2). The other arguments must use named arguments. The optional ,options, are: Integer minimumLength=0: minimum length of the resulting string. If necessary, the blank character is used to fill up unused space. Boolean leftJustified = true: if true, the converted result is left justified in the string; if false it is right justified in the string. For Real expressions the output shall be according to the Modelica grammar. Integer significantDigits=6: defines the number of significant digits in the result string. [Examples: “12.3456”, “0.0123456”, “12345600”, “1.23456E-10”].The format string corresponding to options is: 1. for Reals: (if leftJustified then “-“ else “”)+String(minimumLength)+”.”+ String(signficantDigits)+”g”, 2. for Integers: (if leftJustified then “-“ else “”)+String(minimumLength)+”d”. Format string: According to ANSI-C the format string specifies one conversion specifier (excluding the leading %), may not contain length modifiers, and may not use “*” for width and/or precision. For all numeric values the format specifiers f, e, E, g, G are allowed. For integral values it is also allowed to use the d, i, o, x, X, u, and c-format specifiers (for non-integral values a tool may round, truncate or use a different format if the integer conversion characters are used). The x,X-formats (hexa-decimal) and c (character) for Integers does not lead to input that agrees with the Modelica-grammar.</td>
+</tr>
+</tbody></table>
+<ul>
+<li>事件触发数学公式</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Form</th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>div(x,y)</td>
+<td>Returns the algebraic quotient x/y with any fractional part discarded (also known as truncation toward zero). [Note: this is defined for / in C99; in C89 the result for negative numbers is implementation-defined, so the standard function div() must be used.]. Result and arguments shall have type Real or Integer. If either of the arguments is Real the result is Real otherwise Integer.</td>
+</tr>
+<tr>
+<td>mod(x,y)</td>
+<td>Returns the integer modulus of x/y, i.e. mod(x,y)=x-floor(x/y)*y. Result and arguments shall have type Real or Integer. If either of the arguments is Real the result is Real otherwise Integer. [Note, outside of a when-clause state events are triggered when the return value changes discontinuously. Examples mod(3,1.4)=0.2, mod(-3,1.4)=1.2, mod(3,-1.4)=-1.2]</td>
+</tr>
+<tr>
+<td>rem(x,y)</td>
+<td>Returns the integer remainder of x/y, such that div(x,y)*y + rem(x, y) = x. Result and arguments shall have type Real or Integer. If either of the arguments is Real the result is Real otherwise Integer. [Note, outside of a when-clause state events are triggered when the return value changes discontinuously. Examples rem(3,1.4)=0.2, rem(-3,1.4)=-0.2]</td>
+</tr>
+<tr>
+<td>ceil(x)</td>
+<td>Returns the smallest integer not less than x. Result and argument shall have type Real. [Note, outside of a when-clause state events are triggered when the return value changes discontinuously.]</td>
+</tr>
+<tr>
+<td>floor(x)</td>
+<td>Returns the largest integer not greater than x. Result and argument shall have type Real. [Note, outside of a when-clause state events are triggered when the return value changes discontinuously.].</td>
+</tr>
+<tr>
+<td>integer(x)</td>
+<td>Returns the largest integer not greater than x. The argument shall have type Real. The result has type Integer. [Note, outside of a when-clause state events are triggered when the return value changes discontinuously.].</td>
+</tr>
+</tbody></table>
+<ul>
+<li>内置数学公式和外部内置公式，Modelica.Math library.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Form</th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>sin(x)</td>
+<td>sine</td>
+</tr>
+<tr>
+<td>cos(x)</td>
+<td>cosine</td>
+</tr>
+<tr>
+<td>tan(x)</td>
+<td>tangent (x shall not be: …, -π/2, π/2, 3π/2, …)</td>
+</tr>
+<tr>
+<td>asin(x)</td>
+<td>inverse sine (-1 ≤ x ≤ 1)</td>
+</tr>
+<tr>
+<td>acos(x)</td>
+<td>inverse cosine (-1 ≤ x ≤ 1)</td>
+</tr>
+<tr>
+<td>atan(x)</td>
+<td>inverse tangent</td>
+</tr>
+<tr>
+<td>atan2(y, x)</td>
+<td>the atan2(y, x) function calculates the principal value of the arc tangent of y/x, using the signs of the two arguments to determine the quadrant of the result</td>
+</tr>
+<tr>
+<td>sinh(x)</td>
+<td>hyperbolic sine</td>
+</tr>
+<tr>
+<td>cosh(x)</td>
+<td>hyperbolic cosine</td>
+</tr>
+<tr>
+<td>tanh(x)</td>
+<td>hyperbolic tangent</td>
+</tr>
+<tr>
+<td>exp(x)</td>
+<td>exponential, base e</td>
+</tr>
+<tr>
+<td>log(x)</td>
+<td>natural (base e) logarithm (x &gt; 0)</td>
+</tr>
+<tr>
+<td>log10(x)</td>
+<td>base 10 logarithm (x &gt; 0)</td>
+</tr>
+</tbody></table>
+<ul>
+<li>导数以及特殊作用的运算符 (check in the future…it is too complex now)</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Form</th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>der(expr)</td>
+<td>The time derivative of expr. If the expression expr is a scalar it needs to be a subtype of Real. The expression and all its subexpressions must be differentiable. If expr is an array, the operator is applied to all elements of the array. For non-scalar arguments the function is vectorized according to Section 10.6.12. [For Real parameters and constants the result is a zero scalar or array of the same size as the variable.]</td>
+</tr>
+<tr>
+<td>delay(expr,delayTime, delayMax) delay(expr,delayTime)</td>
+<td></td>
+</tr>
+<tr>
+<td>homotopy(actual=actual, simplified=simplified)</td>
+<td></td>
+</tr>
+<tr>
+<td>semiLinear(x, positiveSlope,  negativeSlope)</td>
+<td>Returns: smooth(0, if x&gt;=0 then positiveSlope<em>x else negativeSlope</em>x).</td>
+</tr>
+<tr>
+<td>inStream(v)</td>
+<td>The operator inStream(v) is only allowed on stream variables v defined in stream connectors, and is the value of the stream variable v close to the connection point assuming that the flow is from the connection point intothe component. This value is computed from the stream connection equations of the flow variables and of the stream variables. The operator is vectorizable.</td>
+</tr>
+<tr>
+<td>actualStream(v)</td>
+<td>The actualStream(v) operator returns the actual value of the stream variable v for any flow direction. The operator is vectorizable.</td>
+</tr>
+<tr>
+<td>spatialDistribution(in0=in0, in1=in1, x=x, positiveVelocity=…, initialPoints=…, initialValues=…)</td>
+<td></td>
+</tr>
+<tr>
+<td>getInstanceName()</td>
+<td>Returns a string with the name of the model/block that is simulated, appended with the fully qualified name of the instance in which this function is called。</td>
+</tr>
+</tbody></table>
+<ul>
+<li><p>noEvent and smooth<br>&emsp;&emsp;noEvent可以处理结果为0附件的情况，避免由于极小的值，越过0点；但会影响计算性能。“使用noEvent操作符可能对仿真结果的精度有显著影响”。</p>
+</li>
+<li><p>P31</p>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Dingli Bao
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="https://bdl-1989.github.io/Modelica/Modelica-Notes/" title="Modelica Specification 3.4 Study Notes">https://bdl-1989.github.io/Modelica/Modelica-Notes/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> unless stating additionally.
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/modelica/" rel="tag"># modelica</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/LinearAlgebra/Note-Matrix-Methods-in-Data-Analysis-Signal-Processing-and-Machine-Learning/" rel="prev" title="[Note]Matrix Methods in Data Analysis, Signal Processing, and Machine Learning">
+                  <i class="fa fa-chevron-left"></i> [Note]Matrix Methods in Data Analysis, Signal Processing, and Machine Learning
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/DataStructure/%E5%A0%86Heap/" rel="next" title="堆Heap">
+                  堆Heap <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+  
+  
+  
+
+
+
+      
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      const activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      const commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      
+
+      
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Dingli Bao</span>
+</div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="Symbols count total">51k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="Reading time total">46 mins.</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
